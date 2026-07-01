@@ -300,12 +300,7 @@ app.use((error, request, response, next) => {
 
 ensureStateFileExists();
 
-app.listen(PORT, () => {
-    console.log(
-        `Wheel: http://localhost:${PORT}`
-    );
-
-    console.log(
-        `Admin: http://localhost:${PORT}/admin`
-    );
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Wheel: http://localhost:${PORT}`);
+    console.log(`Admin: http://localhost:${PORT}/admin`);
 });
