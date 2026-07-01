@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8" />
@@ -15,9 +15,13 @@
     <main class="wheel-page">
         <section class="wheel-card">
             <div class="page-heading">
-                <p class="eyebrow">Private game</p>
+                <p class="eyebrow">
+                    Private game
+                </p>
 
-                <h1>Wheel of PTri</h1>
+                <h1>
+                    Wheel of PTri
+                </h1>
 
                 <p class="subtitle">
                     Press the button to spin the wheel.
@@ -45,6 +49,47 @@
             <p id="resultText" class="result-text" aria-live="polite">
                 Loading names...
             </p>
+
+            <!-- Winner banner -->
+            <section id="winnerBanner" class="winner-banner hidden" aria-live="polite">
+                <div class="winner-banner-glow"></div>
+
+                <span class="winner-sparkle sparkle-one">
+                    ✦
+                </span>
+
+                <span class="winner-sparkle sparkle-two">
+                    ✦
+                </span>
+
+                <span class="winner-sparkle sparkle-three">
+                    ✦
+                </span>
+
+                <div class="winner-icon">
+                    🏆
+                </div>
+
+                <p class="winner-label">
+                    KẾT QUẢ VÒNG QUAY
+                </p>
+
+                <h2 class="winner-heading">
+                    Chúc mừng anh Nhân đã chọn được:
+                </h2>
+
+                <div id="winnerName" class="winner-name">
+                    Tên người chiến thắng
+                </div>
+
+                <p class="winner-message">
+                    Một lựa chọn tuyệt vời dành cho anh Nhân!
+                </p>
+
+                <button id="closeBannerButton" class="winner-close-button" type="button">
+                    Quay lần nữa
+                </button>
+            </section>
         </section>
     </main>
 

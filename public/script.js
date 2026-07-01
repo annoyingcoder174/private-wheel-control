@@ -5,6 +5,15 @@ const spinButton = document.getElementById("spinButton");
 const resultText = document.getElementById("resultText");
 const modeBadge = document.getElementById("modeBadge");
 
+const winnerBanner =
+    document.getElementById("winnerBanner");
+
+const winnerName =
+    document.getElementById("winnerName");
+
+const closeBannerButton =
+    document.getElementById("closeBannerButton");
+
 const colors = [
     "#6d5dfc",
     "#ff6b6b",
@@ -77,7 +86,11 @@ function drawEmptyWheel(message) {
     context.textAlign = "center";
     context.textBaseline = "middle";
 
-    context.fillText(message, center, center);
+    context.fillText(
+        message,
+        center,
+        center
+    );
 }
 
 function drawWheel() {
@@ -138,6 +151,7 @@ function drawWheel() {
         context.rotate(middleAngle);
 
         context.fillStyle = "#ffffff";
+
         context.font =
             `700 ${getFontSize()}px Arial`;
 
@@ -157,6 +171,40 @@ function drawWheel() {
 
         context.restore();
     });
+}
+
+function hideWinnerBanner() {
+    winnerBanner.classList.add("hidden");
+    winnerBanner.classList.remove(
+        "winner-banner-visible"
+    );
+}
+
+function showWinnerBanner(selectedWinner) {
+    winnerName.textContent = selectedWinner;
+
+    winnerBanner.classList.remove("hidden");
+
+    /*
+      Restart the entrance animation every time
+      the banner is displayed.
+    */
+    winnerBanner.classList.remove(
+        "winner-banner-visible"
+    );
+
+    void winnerBanner.offsetWidth;
+
+    winnerBanner.classList.add(
+        "winner-banner-visible"
+    );
+
+    window.setTimeout(() => {
+        winnerBanner.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }, 150);
 }
 
 async function loadWheel() {
@@ -191,7 +239,8 @@ async function loadWheel() {
                 ? "The wheel is ready."
                 : "Add at least two names in the admin page.";
 
-        spinButton.disabled = names.length < 2;
+        spinButton.disabled =
+            names.length < 2;
     } catch (error) {
         console.error(error);
 
@@ -202,9 +251,9 @@ async function loadWheel() {
     }
 }
 
-function getWinnerIndex(winnerName) {
+function getWinnerIndex(winnerNameValue) {
     return names.findIndex(
-        (name) => name === winnerName
+        (name) => name === winnerNameValue
     );
 }
 
@@ -216,10 +265,10 @@ function calculateFinalRotation(winnerIndex) {
         segmentSize / 2;
 
     /*
-      The pointer is located at the top.
-  
-      Canvas segments begin at the right side, so 270 degrees
-      represents the top position.
+      The wheel pointer is located at the top.
+
+      Canvas segments begin at the right side,
+      so 270 degrees represents the top position.
     */
     const targetPosition =
         270 - selectedSegmentCenter;
@@ -258,11 +307,20 @@ async function requestWinner() {
         }
     );
 
-    const data = await response.json();
+    let data;
+
+    try {
+        data = await response.json();
+    } catch (error) {
+        throw new Error(
+            "The server returned an invalid response."
+        );
+    }
 
     if (!response.ok || !data.success) {
         throw new Error(
-            data.message || "Could not spin the wheel."
+            data.message ||
+            "Could not spin the wheel."
         );
     }
 
@@ -274,15 +332,20 @@ async function spinWheel() {
         return;
     }
 
+    hideWinnerBanner();
+
     isSpinning = true;
     spinButton.disabled = true;
 
-    resultText.textContent = "Selecting result...";
+    spinButton.textContent = "Spinning...";
+
+    resultText.textContent =
+        "Đang lựa chọn kết quả...";
 
     try {
         /*
-          Reload before each spin so changes made from
-          the separate admin page are applied immediately.
+          Reload the latest names and mode before
+          every spin so admin changes apply immediately.
         */
         const wheelResponse =
             await fetch("/api/wheel");
@@ -296,17 +359,28 @@ async function spinWheel() {
         const latestWheel =
             await wheelResponse.json();
 
-        names = latestWheel.names;
-        wheelMode = latestWheel.mode;
+        names = Array.isArray(latestWheel.names)
+            ? latestWheel.names
+            : [];
+
+        wheelMode =
+            latestWheel.mode || "random";
 
         modeBadge.classList.toggle(
             "hidden",
             wheelMode !== "controlled"
         );
 
+        if (names.length < 2) {
+            throw new Error(
+                "The wheel needs at least two names."
+            );
+        }
+
         drawWheel();
 
-        const spinResult = await requestWinner();
+        const spinResult =
+            await requestWinner();
 
         const winnerIndex =
             getWinnerIndex(spinResult.winner);
@@ -325,26 +399,56 @@ async function spinWheel() {
         canvas.style.transform =
             `rotate(${currentRotation}deg)`;
 
-        resultText.textContent = "Spinning...";
+        resultText.textContent =
+            "Vòng quay đang quay...";
 
         window.setTimeout(() => {
             resultText.textContent =
                 `Winner: ${spinResult.winner}`;
 
+            showWinnerBanner(
+                spinResult.winner
+            );
+
             isSpinning = false;
             spinButton.disabled = false;
-        }, 5200);
+
+            spinButton.textContent =
+                "Spin the wheel";
+        }, 5300);
     } catch (error) {
         console.error(error);
 
         resultText.textContent =
-            error.message || "Something went wrong.";
+            error.message ||
+            "Something went wrong.";
 
         isSpinning = false;
         spinButton.disabled = false;
+
+        spinButton.textContent =
+            "Spin the wheel";
     }
 }
 
-spinButton.addEventListener("click", spinWheel);
+spinButton.addEventListener(
+    "click",
+    spinWheel
+);
+
+closeBannerButton.addEventListener(
+    "click",
+    () => {
+        hideWinnerBanner();
+
+        resultText.textContent =
+            "Sẵn sàng cho lượt quay tiếp theo.";
+
+        spinButton.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
 
 loadWheel();
