@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Wheel Admin</title>
+
+    <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+    <main class="admin-page">
+        <section id="loginPanel" class="admin-card login-card">
+            <p class="eyebrow">Private controller</p>
+
+            <h1>Admin login</h1>
+
+            <p class="subtitle">
+                Enter the password stored in your
+                <code>.env</code> file.
+            </p>
+
+            <form id="loginForm">
+                <label for="passwordInput">
+                    Password
+                </label>
+
+                <input id="passwordInput" type="password" autocomplete="current-password" required />
+
+                <button class="primary-button" type="submit">
+                    Log in
+                </button>
+            </form>
+
+            <p id="loginMessage" class="form-message"></p>
+        </section>
+
+        <section id="settingsPanel" class="admin-card hidden">
+            <div class="admin-header">
+                <div>
+                    <p class="eyebrow">Private controller</p>
+                    <h1>Wheel settings</h1>
+                </div>
+
+                <button id="logoutButton" class="secondary-button" type="button">
+                    Log out
+                </button>
+            </div>
+
+            <form id="settingsForm">
+                <label for="namesInput">
+                    Names
+                </label>
+
+                <p class="field-description">
+                    Enter one name per line.
+                </p>
+
+                <textarea id="namesInput" rows="12" required></textarea>
+
+                <fieldset>
+                    <legend>Result mode</legend>
+
+                    <label class="radio-option">
+                        <input type="radio" name="wheelMode" value="random" checked />
+
+                        <span>
+                            <strong>Random</strong>
+                            <small>
+                                The server randomly selects a name.
+                            </small>
+                        </span>
+                    </label>
+
+                    <label class="radio-option">
+                        <input type="radio" name="wheelMode" value="controlled" />
+
+                        <span>
+                            <strong>Controlled and disclosed</strong>
+                            <small>
+                                Select a predetermined winner. The public
+                                wheel will display a controlled-mode notice.
+                            </small>
+                        </span>
+                    </label>
+                </fieldset>
+
+                <div id="winnerField" class="hidden">
+                    <label for="winnerSelect">
+                        Selected winner
+                    </label>
+
+                    <select id="winnerSelect"></select>
+                </div>
+
+                <button class="primary-button" type="submit">
+                    Save settings
+                </button>
+            </form>
+
+            <p id="settingsMessage" class="form-message"></p>
+
+            <a class="public-link" href="/" target="_blank" rel="noopener noreferrer">
+                Open public wheel
+            </a>
+        </section>
+    </main>
+
+    <script src="/admin.js"></script>
+</body>
+
+</html>

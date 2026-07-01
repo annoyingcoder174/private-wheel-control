@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Wheel of PTri</title>
+
+    <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+    <main class="wheel-page">
+        <section class="wheel-card">
+            <div class="page-heading">
+                <p class="eyebrow">Private game</p>
+
+                <h1>Wheel of PTri</h1>
+
+                <p class="subtitle">
+                    Press the button to spin the wheel.
+                </p>
+            </div>
+
+            <div id="modeBadge" class="mode-badge hidden">
+                Chắc chắn là người đó rồi :D
+            </div>
+
+            <div class="wheel-wrapper">
+                <canvas id="wheelCanvas" width="600" height="600"></canvas>
+
+                <div class="wheel-pointer"></div>
+
+                <div class="wheel-center">
+                    SPIN
+                </div>
+            </div>
+
+            <button id="spinButton" class="primary-button spin-button" type="button">
+                Spin the wheel
+            </button>
+
+            <p id="resultText" class="result-text" aria-live="polite">
+                Loading names...
+            </p>
+        </section>
+    </main>
+
+    <script src="/script.js"></script>
+</body>
+
+</html>
