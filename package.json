@@ -1,7 +1,6 @@
 {
     "name": "private-wheel-control",
     "version": "1.0.0",
-    "description": "A private wheel with a separate disclosed admin controller",
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
